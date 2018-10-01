@@ -51,14 +51,28 @@ namespace FackerProgram
             return maxParamConstructor;
         }
         
+        private void GenerateRandomValue(Type t)
+        {
+            Random rand = new Random();
+            byte[] bytes = new byte[];
+            //rand.NextBytes(bytes);
+            object o = Activator.CreateInstance(t);
+            
+            
+            
+        }
+
         private object GenerateObject(ConstructorInfo constructor)
         {
-            object obj = new object();
             ParameterInfo[] parameters = constructor.GetParameters();
+            object[] paramsValues = new object[constructor.GetParameters().Count<ParameterInfo>()];
             foreach (ParameterInfo parameter in parameters)
             {
-                //parameter.
+                Type t = parameter.GetType();
+                
+                
             }
+            object obj = constructor.Invoke(paramsValues);
             return obj;
         }
 
@@ -80,7 +94,7 @@ namespace FackerProgram
             return obj;
         }
 
-        public T Create<T>()
+        public void Create<T>()
         {
             Type t = typeof(T);
             FieldInfo[] fields = t.GetFields();

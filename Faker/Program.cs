@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FackerProgram;
+using System.Runtime.InteropServices;
 
 namespace Faker
 {
@@ -12,7 +13,11 @@ namespace Faker
         static void Main(string[] args)
         {
             FackerProgram.Faker faker = new FackerProgram.Faker();
-            MyTestClass myclass = faker.Create<MyTestClass>();
+            //faker.Create<MyTestClass>();
+            int a = new int();
+            Type t = a.GetType();
+            Console.WriteLine(a.GetType());
+            Console.WriteLine(Marshal.SizeOf(t));
         }
     }
 
