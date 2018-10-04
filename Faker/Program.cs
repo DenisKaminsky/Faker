@@ -13,11 +13,10 @@ namespace Faker
         static void Main(string[] args)
         {
             FackerProgram.Faker faker = new FackerProgram.Faker();
-            //faker.Create<MyTestClass>();
-            int a = new int();
-            Type t = a.GetType();
-            Console.WriteLine(a.GetType());
-            Console.WriteLine(Marshal.SizeOf(t));
+            MyTestClass c = faker.CreateByFillingFields<MyTestClass>();
+
+            int a = 0;
+
         }
     }
 
@@ -25,12 +24,17 @@ namespace Faker
     {
         private int fieldprivate;
         public int fieldpublic;
-        public float fieldpublic2;
+        public short fieldpublic2;
+        public char fieldpublic3;
+        public byte fieldpublic4;
+        public long fieldpublic5;
+        public bool fieldpublic6;
 
         public string Str { get; set; }
         public MyTestClass property1 { get; set; }
+        private MyTestClass proverty2 { get; set;}
 
-        public MyTestClass(int f1,float f2, string f3)
+        public MyTestClass(int f1,short f2, string f3)
         {
             fieldpublic = f1;
             fieldpublic2 = f2;

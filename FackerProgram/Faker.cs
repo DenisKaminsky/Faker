@@ -10,9 +10,11 @@ namespace FackerProgram
 {
     public sealed class Faker
     {
+        private ValuesGenerator generator;
+
         public Faker()
         {
-
+            generator = new ValuesGenerator();
         }
 
         private ConstructorInfo FindMinParamsConstructor(Type t)
@@ -51,37 +53,76 @@ namespace FackerProgram
             return maxParamConstructor;
         }
         
-        private void GenerateRandomValue(Type t)
-        {
-            Random rand = new Random();
-            byte[] bytes = new byte[];
-            //rand.NextBytes(bytes);
-            object o = Activator.CreateInstance(t);
-            
-            
-            
-        }
-
         private object GenerateObject(ConstructorInfo constructor)
         {
             ParameterInfo[] parameters = constructor.GetParameters();
             object[] paramsValues = new object[constructor.GetParameters().Count<ParameterInfo>()];
             foreach (ParameterInfo parameter in parameters)
             {
-                Type t = parameter.GetType();
-                
-                
+                Type t = parameter.GetType(); 
             }
             object obj = constructor.Invoke(paramsValues);
             return obj;
+        }        
+
+        //генератор значений(общий)
+        private object GenerateValue(Type t)
+        {
+            object obj = null;
+            switch (t.ToString())
+            {
+                case "System.Int16":
+                    obj = generator.GenerateShort();
+                    break;
+                case "System.Int32":
+                    obj = generator.GenerateInt();
+                    break;
+                case "System.Int64":
+                    obj = generator.GenerateLong();
+                    break;
+                case "System.UInt16":
+                    obj = generator.GenerateUShort();
+                    break;
+                case "System.UInt32":
+                    obj = generator.GenerateUInt();
+                    break;
+                case "System.UInt64":
+                    obj = generator.GenerateULong();
+                    break;
+                case "System.Double":
+
+                    break;
+                case "System.Single":
+
+                    break;
+                case "System.Char":
+                    obj = generator.GenerateChar();
+                    break;
+                case "System.Boolean":
+                    obj = generator.GenerateBool();
+                    break;
+                case "System.Byte":
+                    obj = generator.GenerateByte();
+                    break;
+                case "System.String":
+
+                    break;                
+            }
+            return obj;
         }
 
-        public T CreateByFillingField<T>()
+        //создание обьекта инициализацией полей
+        public T CreateByFillingFields<T>()
         {
-            T obj;
             Type t = typeof(T);
-            ConstructorInfo constructor = FindMinParamsConstructor(t);
-            obj = (T)GenerateObject(constructor);
+            T obj = (T)Activator.CreateInstance(t);
+
+            FieldInfo[] fields = t.GetFields();
+            foreach (FieldInfo field in fields)
+            {
+                string s = field.FieldType.ToString();
+                field.SetValue(obj, GenerateValue(field.FieldType));
+            }
             return obj;
         }
 
@@ -97,13 +138,13 @@ namespace FackerProgram
         public void Create<T>()
         {
             Type t = typeof(T);
-            FieldInfo[] fields = t.GetFields();
+            FieldInfo[] fields = t.GetFields(BindingFlags.Public| BindingFlags.Instance);
             Console.WriteLine("Fields:");
             foreach (FieldInfo field in fields)
                 Console.WriteLine(field.FieldType + "  " + field.Name);
 
             Console.WriteLine("\nPropeties: ");
-            PropertyInfo[] properties = t.GetProperties();
+            PropertyInfo[] properties = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (PropertyInfo property in properties)
                 Console.WriteLine(property.PropertyType + "  " + property.Name);
 
