@@ -10,11 +10,12 @@ namespace FackerProgram
 {
     public sealed class Faker
     {
-        private BaseGenerator generator;
-
+        private BaseGenerator baseGenerator;
+        private DateTimeGenerator dateTimeGenerator;
         public Faker()
         {
-            generator = new BaseGenerator();
+            baseGenerator = new BaseGenerator();
+            dateTimeGenerator = new DateTimeGenerator();
         }
 
         //поиск конструктора с минимальным количеством параметров
@@ -63,57 +64,66 @@ namespace FackerProgram
             switch (t.ToString())
             {
                 case "System.Int16":
-                    obj = generator.GenerateShort();
+                    obj = baseGenerator.GenerateShort();
                     break;
                 case "System.Int32":
-                    obj = generator.GenerateInt();
+                    obj = baseGenerator.GenerateInt();
                     break;
                 case "System.Int64":
-                    obj = generator.GenerateLong();
+                    obj = baseGenerator.GenerateLong();
                     break;
                 case "System.UInt16":
-                    obj = generator.GenerateUShort();
+                    obj = baseGenerator.GenerateUShort();
                     break;
                 case "System.UInt32":
-                    obj = generator.GenerateUInt();
+                    obj = baseGenerator.GenerateUInt();
                     break;
                 case "System.UInt64":
-                    obj = generator.GenerateULong();
+                    obj = baseGenerator.GenerateULong();
                     break;
                 case "System.Double":
-                    obj = generator.GenerateDouble();
+                    obj = baseGenerator.GenerateDouble();
                     break;
                 case "System.Single":
-                    obj = generator.GenerateFloat();
+                    obj = baseGenerator.GenerateFloat();
                     break;
                 case "System.Char":
-                    obj = generator.GenerateChar();
+                    obj = baseGenerator.GenerateChar();
                     break;
                 case "System.Boolean":
-                    obj = generator.GenerateBool();
+                    obj = baseGenerator.GenerateBool();
                     break;
                 case "System.Byte":
-                    obj = generator.GenerateByte();
+                    obj = baseGenerator.GenerateByte();
                     break;
                 case "System.String":
-                    obj = generator.GenerateString();
-                    break;           
+                    obj = baseGenerator.GenerateString();
+                    break;
+                case "System.DateTime":
+                    obj = dateTimeGenerator.GenerateDate();
+                    break;      
             }
             return obj;
         }
 
-        //создание обьекта инициализацией полей
+        //создание обьекта инициализацией полей и свойств
         public T CreateByFillingFields<T>()
         {
-            Type t = typeof(T);
-            
+            Type t = typeof(T);            
             T obj = (T)Activator.CreateInstance(t);   //System.MissingMethodException();
 
+            //инициализация полей
             FieldInfo[] fields = t.GetFields();
             foreach (FieldInfo field in fields)
             {
-                string s = field.FieldType.ToString();
                 field.SetValue(obj, GenerateValue(field.FieldType));
+            }
+            //инициализация свойств
+            PropertyInfo[] properties = t.GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                if (property.CanWrite && property.SetMethod.IsPublic)
+                    property.SetValue(obj, GenerateValue(property.PropertyType));
             }
             return obj;
         }
@@ -143,9 +153,13 @@ namespace FackerProgram
                 Console.WriteLine(field.FieldType + "  " + field.Name);
 
             Console.WriteLine("\nPropeties: ");
-            PropertyInfo[] properties = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo[] properties = t.GetProperties();
             foreach (PropertyInfo property in properties)
+            {
                 Console.WriteLine(property.PropertyType + "  " + property.Name);
+                bool a = (property.CanWrite  && property.SetMethod.IsPublic);
+                int b = 0;
+            }
 
             Console.WriteLine("\nMethods: ");
             MethodInfo[] methods = t.GetMethods();

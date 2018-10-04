@@ -8,13 +8,13 @@ namespace FackerProgram
 
         public BaseGenerator()
         {
-            rand = new Random();
+            rand = new Random();            
         }
 
         //генератор Short(INT16)
-        public short GenerateShort()
+        public short GenerateShort() 
         {
-            byte[] bytes = new byte[2];
+            byte[] bytes = new byte[2]; 
             rand.NextBytes(bytes);
             return BitConverter.ToInt16(bytes, 0);
         }
@@ -97,12 +97,14 @@ namespace FackerProgram
 
         public string GenerateString()
         {
+            //var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             int length = rand.Next(1, 100);
             string s ="";
             for (int i = 0; i < length; i++)
             {
                 s += Convert.ToChar(GenerateByte());
                 //s+=GenerateChar();
+                //s += chars[rand.Next(0, chars.Length)];
             }
             return s;
         }
