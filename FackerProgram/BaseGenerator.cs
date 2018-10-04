@@ -101,7 +101,8 @@ namespace FackerProgram
             string s ="";
             for (int i = 0; i < length; i++)
             {
-                //s += ();
+                s += Convert.ToChar(GenerateByte());
+                //s+=GenerateChar();
             }
             return s;
         }

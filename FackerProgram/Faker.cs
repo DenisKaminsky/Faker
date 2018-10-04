@@ -17,6 +17,7 @@ namespace FackerProgram
             generator = new BaseGenerator();
         }
 
+        //поиск конструктора с минимальным количеством параметров
         private ConstructorInfo FindMinParamsConstructor(Type t)
         {
             ConstructorInfo[] constructors = t.GetConstructors();
@@ -35,6 +36,7 @@ namespace FackerProgram
             return minParamConstructor;                
         }
 
+        //поиск конструктора с макс количеством параметров
         private ConstructorInfo FindMaxParamsConstructor(Type t)
         {
             ConstructorInfo[] constructors = t.GetConstructors();
@@ -57,6 +59,7 @@ namespace FackerProgram
         private object GenerateValue(Type t)
         {
             object obj = null;
+
             switch (t.ToString())
             {
                 case "System.Int16":
@@ -103,7 +106,8 @@ namespace FackerProgram
         public T CreateByFillingFields<T>()
         {
             Type t = typeof(T);
-            T obj = (T)Activator.CreateInstance(t);
+            
+            T obj = (T)Activator.CreateInstance(t);   //System.MissingMethodException();
 
             FieldInfo[] fields = t.GetFields();
             foreach (FieldInfo field in fields)
@@ -114,14 +118,21 @@ namespace FackerProgram
             return obj;
         }
 
-        /*public T CreateByConstructor<T>()
+        public T CreateByConstructor<T>()
         {
-            T obj ;
             Type t = typeof(T);
             ConstructorInfo constructor = FindMaxParamsConstructor(t);
-            //obj = (T)GenerateObject(constructor);
+            object[] parametersValues = new object[constructor.GetParameters().Count<ParameterInfo>()];
+            ParameterInfo[] parameters =  constructor.GetParameters();
+            int i = 0;
+            foreach (ParameterInfo parameter in parameters)
+            {
+                parametersValues[i] = GenerateValue(parameter.ParameterType);
+                i++;
+            }
+            T obj = (T)constructor.Invoke(parametersValues);
             return obj;
-        }*/
+        }
 
         public void Create<T>()
         {

@@ -21,8 +21,8 @@ namespace Faker
         {
             FackerProgram.Faker faker = new FackerProgram.Faker();
             MyTestClass c = faker.CreateByFillingFields<MyTestClass>();
-            
-            Console.WriteLine(GenerateChar());
+
+            int a = 4;
         }
     }
 
@@ -37,22 +37,25 @@ namespace Faker
         public bool fieldpublic6;
         public float fieldpublic7;
         public double fieldpublic8;
-
+        public string s;
+        public string s2;
         public string Str { get; set; }
         public MyTestClass property1 { get; set; }
         private MyTestClass proverty2 { get; set;}
 
-        public MyTestClass(int f1,short f2, string f3)
+        public MyTestClass(int f1, short f2, string f3)
         {
             fieldpublic = f1;
             fieldpublic2 = f2;
             Str = f3;
+
         }
 
         public MyTestClass()
         {
 
         }
+
 
     }
 }
