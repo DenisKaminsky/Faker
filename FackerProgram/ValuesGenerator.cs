@@ -84,12 +84,20 @@ namespace FackerProgram
             return BitConverter.ToChar(bytes, 0);
         }
 
-        /*//генератор Double
-        public object GenerateDouble()
+        //генератор Double
+        public double GenerateDouble()
         {
             byte[] bytes = new byte[8];
             rand.NextBytes(bytes);
             return BitConverter.ToDouble(bytes, 0);
-        }*/
+        }
+
+        //генератор float
+        public double GenerateFloat()
+        {
+            byte[] bytes = new byte[4];
+            rand.NextBytes(bytes);
+            return BitConverter.ToSingle(bytes, 0);
+        }
     }
 }

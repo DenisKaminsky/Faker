@@ -90,10 +90,10 @@ namespace FackerProgram
                     obj = generator.GenerateULong();
                     break;
                 case "System.Double":
-
+                    obj = generator.GenerateDouble();
                     break;
                 case "System.Single":
-
+                    obj = generator.GenerateFloat();
                     break;
                 case "System.Char":
                     obj = generator.GenerateChar();

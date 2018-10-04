@@ -10,13 +10,20 @@ namespace Faker
 {
     class Program
     {
+        //генератор Char
+        public static double GenerateChar()
+        {
+            Random rand = new Random();
+            return rand.NextDouble();
+        }
+
         static void Main(string[] args)
         {
             FackerProgram.Faker faker = new FackerProgram.Faker();
-            MyTestClass c = faker.CreateByFillingFields<MyTestClass>();
+            // MyTestClass c = faker.CreateByFillingFields<MyTestClass>();
 
-            int a = 0;
-
+            //int a = 0;
+            Console.WriteLine(GenerateChar());
         }
     }
 
@@ -29,6 +36,8 @@ namespace Faker
         public byte fieldpublic4;
         public long fieldpublic5;
         public bool fieldpublic6;
+        public float fieldpublic7;
+        public double fieldpublic8;
 
         public string Str { get; set; }
         public MyTestClass property1 { get; set; }
