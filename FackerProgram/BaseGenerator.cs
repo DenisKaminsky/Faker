@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace FackerProgram
 {
-    public class ValuesGenerator
+    public class BaseGenerator
     {
         private Random rand;
 
-        public ValuesGenerator()
+        public BaseGenerator()
         {
             rand = new Random();
         }
@@ -93,11 +88,22 @@ namespace FackerProgram
         }
 
         //генератор float
-        public double GenerateFloat()
+        public float GenerateFloat()
         {
             byte[] bytes = new byte[4];
             rand.NextBytes(bytes);
             return BitConverter.ToSingle(bytes, 0);
+        }
+
+        public string GenerateString()
+        {
+            int length = rand.Next(1, 100);
+            string s ="";
+            for (int i = 0; i < length; i++)
+            {
+                //s += ();
+            }
+            return s;
         }
     }
 }

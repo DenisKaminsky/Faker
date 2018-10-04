@@ -20,9 +20,8 @@ namespace Faker
         static void Main(string[] args)
         {
             FackerProgram.Faker faker = new FackerProgram.Faker();
-            // MyTestClass c = faker.CreateByFillingFields<MyTestClass>();
-
-            //int a = 0;
+            MyTestClass c = faker.CreateByFillingFields<MyTestClass>();
+            
             Console.WriteLine(GenerateChar());
         }
     }

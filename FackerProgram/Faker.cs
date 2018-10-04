@@ -10,11 +10,11 @@ namespace FackerProgram
 {
     public sealed class Faker
     {
-        private ValuesGenerator generator;
+        private BaseGenerator generator;
 
         public Faker()
         {
-            generator = new ValuesGenerator();
+            generator = new BaseGenerator();
         }
 
         private ConstructorInfo FindMinParamsConstructor(Type t)
@@ -51,19 +51,7 @@ namespace FackerProgram
                 }
             }
             return maxParamConstructor;
-        }
-        
-        private object GenerateObject(ConstructorInfo constructor)
-        {
-            ParameterInfo[] parameters = constructor.GetParameters();
-            object[] paramsValues = new object[constructor.GetParameters().Count<ParameterInfo>()];
-            foreach (ParameterInfo parameter in parameters)
-            {
-                Type t = parameter.GetType(); 
-            }
-            object obj = constructor.Invoke(paramsValues);
-            return obj;
-        }        
+        }       
 
         //генератор значений(общий)
         private object GenerateValue(Type t)
@@ -105,8 +93,8 @@ namespace FackerProgram
                     obj = generator.GenerateByte();
                     break;
                 case "System.String":
-
-                    break;                
+                    obj = generator.GenerateString();
+                    break;           
             }
             return obj;
         }
@@ -126,14 +114,14 @@ namespace FackerProgram
             return obj;
         }
 
-        public T CreateByConstructor<T>()
+        /*public T CreateByConstructor<T>()
         {
-            T obj;
+            T obj ;
             Type t = typeof(T);
             ConstructorInfo constructor = FindMaxParamsConstructor(t);
-            obj = (T)GenerateObject(constructor);
+            //obj = (T)GenerateObject(constructor);
             return obj;
-        }
+        }*/
 
         public void Create<T>()
         {
