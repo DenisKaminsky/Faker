@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using System.Reflection;
 
 namespace FackerProgram
@@ -99,6 +96,9 @@ namespace FackerProgram
                 case "System.String":
                     obj = baseGenerator.GenerateString();
                     break;
+                case "System.Object":
+                    obj = baseGenerator.GenerateObject();
+                    break;
                 case "System.DateTime":
                     obj = dateTimeGenerator.GenerateDate();
                     break;      
@@ -116,7 +116,14 @@ namespace FackerProgram
             FieldInfo[] fields = t.GetFields();
             foreach (FieldInfo field in fields)
             {
-                field.SetValue(obj, GenerateValue(field.FieldType));
+                try
+                {
+                    field.SetValue(obj, GenerateValue(field.FieldType));
+                }
+                catch(FieldAccessException e)
+                {
+                    //...const
+                }
             }
             //инициализация свойств
             PropertyInfo[] properties = t.GetProperties();
@@ -144,33 +151,26 @@ namespace FackerProgram
             return obj;
         }
 
-        public void Create<T>()
+        public void PrintObject(object obj)
         {
-            Type t = typeof(T);
-            FieldInfo[] fields = t.GetFields(BindingFlags.Public| BindingFlags.Instance);
-            Console.WriteLine("Fields:");
+            Type t = obj.GetType();
+            Console.WriteLine("Fields:\n");
+            FieldInfo[] fields = t.GetFields();           
             foreach (FieldInfo field in fields)
-                Console.WriteLine(field.FieldType + "  " + field.Name);
+                Console.WriteLine(field.FieldType + "  " + field.Name+"  "+field.GetValue(obj));
 
-            Console.WriteLine("\nPropeties: ");
+            Console.WriteLine("\nPropeties:\n");
             PropertyInfo[] properties = t.GetProperties();
             foreach (PropertyInfo property in properties)
             {
-                Console.WriteLine(property.PropertyType + "  " + property.Name);
-                bool a = (property.CanWrite  && property.SetMethod.IsPublic);
-                int b = 0;
+                if (property.CanWrite && property.SetMethod.IsPublic)
+                    Console.WriteLine(property.PropertyType + "  " + property.Name+"  "+property.GetValue(obj));
             }
+        }
 
-            Console.WriteLine("\nMethods: ");
-            MethodInfo[] methods = t.GetMethods();
-            foreach (MethodInfo method in methods)
-                Console.WriteLine(method.ReturnType + "  " + method.Name);
-
-            Console.WriteLine("\nConstructors: ");
-            ConstructorInfo[] constructors = t.GetConstructors();
-            foreach (ConstructorInfo constructor in constructors)
-                Console.WriteLine("Params count: " + constructor.GetParameters().Count<ParameterInfo>() + " " + constructor.Name);
-            
+        public void Create<T>()
+        {
+                        
         }
     }
 }

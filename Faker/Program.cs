@@ -19,10 +19,15 @@ namespace Faker
 
         static void Main(string[] args)
         {
-            FackerProgram.Faker faker = new FackerProgram.Faker();
+            FackerProgram.Faker faker = new FackerProgram.Faker();          
             MyTestClass c = faker.CreateByFillingFields<MyTestClass>();
+            faker.PrintObject(c);
             //faker.Create<MyTestClass>();
-            int a = 4;
+            List<int> mass = new List<int>();
+            List<double> mass2 = new List<double>();
+            //Console.WriteLine();
+            //Console.WriteLine(mass.GetType());
+            //int a = 4;
         }
     }
 
@@ -49,7 +54,6 @@ namespace Faker
             fieldpublic = f1;
             fieldpublic2 = f2;
             Str = f3;
-
         }
 
         public MyTestClass()
