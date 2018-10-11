@@ -6,19 +6,19 @@ namespace FackerProgram
 {
     public class CollectionsGenerator
     {
-        private Random rand;
-        private BaseGenerator baseGenerator;
+        private Random _rand;
+        private BaseGenerator _baseGenerator;
 
         public CollectionsGenerator()
         {
-            rand = new Random();
-            baseGenerator = new BaseGenerator();
+            _rand = new Random();
+            _baseGenerator = new BaseGenerator();
         }
 
         public object GenerateList(Type t,Generator generator)
         {
             object list = Activator.CreateInstance(typeof(List<>).MakeGenericType(t));
-            int count = rand.Next(1, 21);
+            int count = _rand.Next(1, 21);
             for (int i = 0; i < count; i++)
             {
                 ((IList)list).Add(generator.GenerateValue(t));
@@ -28,7 +28,7 @@ namespace FackerProgram
 
         public object GenerateArray(Type t, Generator generator)
         {
-            int count = rand.Next(1, 21);
+            int count = _rand.Next(1, 21);
             Array mass = Array.CreateInstance(t, count);
 
             for (int i = 0; i < count; i++)

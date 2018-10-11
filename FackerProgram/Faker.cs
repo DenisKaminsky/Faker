@@ -6,21 +6,21 @@ namespace FackerProgram
 {
     public sealed class Faker : IFacker
     {
-        private Generator generator;
+        private Generator _generator;
 
         public Faker()
         {
-            generator = new Generator();
+            _generator = new Generator();
         }
 
         public void DTOAdd(Type t)
         {
-            generator.DTOAddType(t);
+            _generator.DTOAddType(t);
         }
 
         public void DTORemove(Type t)
         {
-            generator.DTORemoveType(t);
+            _generator.DTORemoveType(t);
         }
 
         //поиск конструктора с минимальным количеством параметров
@@ -62,10 +62,9 @@ namespace FackerProgram
         } 
 
         //создание обьекта инициализацией полей и свойств
-        public T CreateByFillingFields<T>()
-        {
-            Type t = typeof(T);            
-            T obj = (T)Activator.CreateInstance(t);   //System.MissingMethodException();
+        public object CreateByFillingFields(Type t)
+        {          
+            object obj = Activator.CreateInstance(t);   //System.MissingMethodException();
 
             //инициализация полей
             FieldInfo[] fields = t.GetFields();
@@ -73,7 +72,7 @@ namespace FackerProgram
             {
                 try
                 {
-                    field.SetValue(obj, generator.GenerateValue(field.FieldType));
+                    field.SetValue(obj, _generator.GenerateValue(field.FieldType));
                 }
                 catch(FieldAccessException e)
                 {
@@ -85,29 +84,26 @@ namespace FackerProgram
             foreach (PropertyInfo property in properties)
             {
                 if (property.CanWrite && property.SetMethod.IsPublic)
-                    property.SetValue(obj, generator.GenerateValue(property.PropertyType));
+                    property.SetValue(obj, _generator.GenerateValue(property.PropertyType));
             }
             return obj;
         }
 
-        public T CreateByConstructor<T>(ConstructorInfo constructor)
+        public object CreateByConstructor(ConstructorInfo constructor,Type t)
         {
-            Type t = typeof(T);
             object[] parametersValues = new object[constructor.GetParameters().Count<ParameterInfo>()];
             ParameterInfo[] parameters =  constructor.GetParameters();
             int i = 0;
             foreach (ParameterInfo parameter in parameters)
             {
-                parametersValues[i] = generator.GenerateValue(parameter.ParameterType);
+                parametersValues[i] = _generator.GenerateValue(parameter.ParameterType);
                 i++;
             }
-            T obj = (T)constructor.Invoke(parametersValues);
-            return obj;
+            return constructor.Invoke(parametersValues);
         }        
 
-        public T Create<T>()
+        public object Create(Type t)
         {
-            Type t = typeof(T);
             ConstructorInfo constructor = FindMaxParamsConstructor(t);
             int constructorParametersCount = constructor.GetParameters().Count<ParameterInfo>();
             int publicFieldCount = t.GetFields().Count<FieldInfo>();
@@ -116,10 +112,17 @@ namespace FackerProgram
             if (constructorParametersCount >= publicFieldCount + publicPropertiesCount)
             {
                 Console.WriteLine("Object was create by constructor\n");
-                return CreateByConstructor<T>(constructor);
+                return CreateByConstructor(constructor,t);
             }
             Console.WriteLine("Object was create by filling fields\n");
-            return CreateByFillingFields<T>();
+            return CreateByFillingFields(t);
+        }
+
+        public T Create<T>()
+        {
+            _generator.SetFaker(this);
+            Type t = typeof(T);
+            return (T)Create(t);
         }
     }
 }

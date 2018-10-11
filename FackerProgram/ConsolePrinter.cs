@@ -50,12 +50,17 @@ namespace FackerProgram
 
         private void PrintValue(object obj,string indent)
         {
-            if (obj.GetType().IsArray)
-                PrintArray(obj, indent);
-            else if (obj.GetType().IsGenericType)
-                PrintList(obj, indent);
+            if (obj != null)
+            {
+                if (obj.GetType().IsArray)
+                    PrintArray(obj, indent);
+                else if (obj.GetType().IsGenericType)
+                    PrintList(obj, indent);
+                else
+                    Console.WriteLine(obj);
+            }
             else
-                Console.WriteLine(obj);
+                Console.WriteLine("null");
         }
 
         public void Print(object obj)
