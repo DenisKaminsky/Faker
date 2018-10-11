@@ -13,7 +13,7 @@ namespace FackerProgram
         }
 
         //генератор Short(INT16)
-        public short GenerateShort() 
+        public object GenerateShort() 
         {
             byte[] bytes = new byte[sizeof(short)]; 
             rand.NextBytes(bytes);
@@ -21,7 +21,7 @@ namespace FackerProgram
         }
 
         //генератор Int(INT32)
-        public int GenerateInt()
+        public object GenerateInt()
         {
             byte[] bytes = new byte[sizeof(int)];
             rand.NextBytes(bytes);
@@ -29,7 +29,7 @@ namespace FackerProgram
         }
 
         //генератор Long(INT64)
-        public long GenerateLong()
+        public object GenerateLong()
         {
             byte[] bytes = new byte[sizeof(long)];
             rand.NextBytes(bytes);
@@ -37,7 +37,7 @@ namespace FackerProgram
         }
 
         //генератор UShort(UINT16)
-        public ushort GenerateUShort()
+        public object GenerateUShort()
         {
             byte[] bytes = new byte[sizeof(ushort)];
             rand.NextBytes(bytes);
@@ -45,7 +45,7 @@ namespace FackerProgram
         }
 
         //генератор UInt(UINT32)
-        public uint GenerateUInt()
+        public object GenerateUInt()
         {
             byte[] bytes = new byte[sizeof(uint)];
             rand.NextBytes(bytes);
@@ -53,7 +53,7 @@ namespace FackerProgram
         }
 
         //генератор ULONG(UINT64)
-        public ulong GenerateULong()
+        public object GenerateULong()
         {
             byte[] bytes = new byte[sizeof(ulong)];
             rand.NextBytes(bytes);
@@ -61,19 +61,19 @@ namespace FackerProgram
         }
 
         //генератор Bool
-        public bool GenerateBool()
+        public object GenerateBool()
         {
             return Convert.ToBoolean(rand.Next(0, 2));
         }
 
         //генератор Byte
-        public byte GenerateByte()
+        public object GenerateByte()
         {            
             return Convert.ToByte(rand.Next(0, 256));
         }
 
         //генератор Char
-        public char GenerateChar()
+        public object GenerateChar()
         {
             byte[] bytes = new byte[sizeof(char)];
             rand.NextBytes(bytes);
@@ -81,7 +81,7 @@ namespace FackerProgram
         }
 
         //генератор Double
-        public double GenerateDouble()
+        public object GenerateDouble()
         {
             byte[] bytes = new byte[sizeof(double)];
             rand.NextBytes(bytes);
@@ -89,7 +89,7 @@ namespace FackerProgram
         }
 
         //генератор float
-        public float GenerateFloat()
+        public object GenerateFloat()
         {
             byte[] bytes = new byte[sizeof(float)];
             rand.NextBytes(bytes);
@@ -97,7 +97,7 @@ namespace FackerProgram
         }
 
         //генератор string
-        public string GenerateString()
+        public object GenerateString()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             int length = rand.Next(1, 21);
