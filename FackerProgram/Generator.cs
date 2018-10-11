@@ -13,6 +13,7 @@ namespace FackerProgram
         private CollectionsGenerator _collectionGenerator;
         private Dictionary<Type,Func<object>> _typeDictionary;
         private List<Type> _dtoTypeList;
+        private List<Type> _cycleList;
         private Faker _faker;
 
         public Generator()
@@ -22,8 +23,20 @@ namespace FackerProgram
             _collectionGenerator = new CollectionsGenerator();
             _typeDictionary = new Dictionary<Type, Func<object>>();
             _dtoTypeList = new List<Type>();
+            _cycleList = new List<Type>();
             FillDictionary();
         }
+
+        public void AddToCycle(Type t)
+        {
+            _cycleList.Add(t);
+        }
+
+        public void RemoveFromCycle(Type t)
+        {
+            _cycleList.Remove(t);
+        }
+
         public void SetFaker(Faker faker)
         {
             _faker = faker;
@@ -74,7 +87,10 @@ namespace FackerProgram
             else if (_typeDictionary.TryGetValue(t, out generatorDelegate))
                 obj = generatorDelegate.Invoke();
             else if (_dtoTypeList.Contains(t))
-                obj = _faker.Create(t);
+            {
+                if (!_cycleList.Contains(t))                
+                    obj = _faker.Create(t);                
+            }
             return obj;
         }
     }

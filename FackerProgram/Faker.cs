@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace FackerProgram
 {
@@ -104,6 +105,8 @@ namespace FackerProgram
 
         public object Create(Type t)
         {
+            object result;
+            _generator.AddToCycle(t);
             ConstructorInfo constructor = FindMaxParamsConstructor(t);
             int constructorParametersCount = constructor.GetParameters().Count<ParameterInfo>();
             int publicFieldCount = t.GetFields().Count<FieldInfo>();
@@ -112,10 +115,12 @@ namespace FackerProgram
             if (constructorParametersCount >= publicFieldCount + publicPropertiesCount)
             {
                 Console.WriteLine("Object was create by constructor\n");
-                return CreateByConstructor(constructor,t);
+                result = CreateByConstructor(constructor,t);
             }
-            Console.WriteLine("Object was create by filling fields\n");
-            return CreateByFillingFields(t);
+            //Console.WriteLine("Object was create by filling fields\n");
+            result = CreateByFillingFields(t);
+            _generator.RemoveFromCycle(t);
+            return result;
         }
 
         public T Create<T>()

@@ -20,7 +20,8 @@ namespace Faker
         static void Main(string[] args)
         {
             FackerProgram.Faker faker = new FackerProgram.Faker();
-            faker.DTOAdd(typeof(Foo));     
+            faker.DTOAdd(typeof(Foo));
+            faker.DTOAdd(typeof(Bar));    
             MyTestClass c = faker.Create<MyTestClass>();
             ConsolePrinter printer = new ConsolePrinter();
             printer.Print(c);
@@ -32,7 +33,8 @@ namespace Faker
         //public bool[] mass;
        // public List<int>[] list;
         public Foo foo;
-        private int fieldprivate;
+        public Bar bar;
+        /*private int fieldprivate;
         public int fieldpublic;
         
         public short fieldpublic2;
@@ -48,7 +50,7 @@ namespace Faker
             fieldpublic = f1;
             fieldpublic2 = f2;
             Str = f3;
-        }
+        }*/
 
         public MyTestClass()
         {
@@ -58,13 +60,14 @@ namespace Faker
 
     public class Foo
     {        
-        private int fieldprivate;
-        public bool fieldpublic;
+        //private int fieldprivate;
+        //public bool fieldpublic;
+        public MyTestClass bar;
 
-        public short fieldpublic2;
+        /*public short fieldpublic2;
         public DateTime d;
 
-        public string Str { get; set; }
+        public string Str { get; set; }*/
 
         public Foo()
         {
@@ -72,4 +75,19 @@ namespace Faker
         }
     }
 
+    public class Bar
+    {
+        //private int fieldprivate;
+        //public bool fieldpublic;
+        public Foo foo;
+        /*public short fieldpublic2;
+        public DateTime d;
+
+        public string Str { get; set; }*/
+
+        public Bar()
+        {
+
+        }
+    }
 }
