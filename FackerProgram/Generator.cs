@@ -12,6 +12,7 @@ namespace FackerProgram
         private DateTimeGenerator dateTimeGenerator;
         private CollectionsGenerator collectionGenerator;
         private Dictionary<Type,Func<object>> typeDictionary;
+        private List<Type> dtoTypeList;
 
         public Generator()
         {
@@ -19,7 +20,19 @@ namespace FackerProgram
             dateTimeGenerator = new DateTimeGenerator();
             collectionGenerator = new CollectionsGenerator();
             typeDictionary = new Dictionary<Type, Func<object>>();
+            dtoTypeList = new List<Type>();
             FillDictionary();
+        }
+
+        public void DTOAddType(Type t)
+        {
+            if (!dtoTypeList.Contains(t))
+                dtoTypeList.Add(t);
+        }
+
+        public void DTORemoveType(Type t)
+        {
+            dtoTypeList.Remove(t);
         }
 
         private void FillDictionary()
@@ -40,20 +53,12 @@ namespace FackerProgram
             typeDictionary.Add(typeof(DateTime), dateTimeGenerator.GenerateDate);
         }
 
-        private object GenerateBaseTypeValue(Type t)
-        {
-            Func<object> generatorDelegate = null;
-            typeDictionary.TryGetValue(t,out generatorDelegate);
-            if (generatorDelegate != null)
-                return generatorDelegate.Invoke();
-            else
-                return null;
-        }
-
         //генератор значений(общий)
         public object GenerateValue(Type t)
         {
             object obj = null;
+            Func<object> generatorDelegate = null;
+
             if (t.IsArray || t.IsGenericType)
             {
                 if (t.IsGenericType)
@@ -61,8 +66,8 @@ namespace FackerProgram
                 else
                     obj = collectionGenerator.GenerateArray(t.GetElementType(), this);
             }
-            else
-                obj = GenerateBaseTypeValue(t);
+            else if(typeDictionary.TryGetValue(t, out generatorDelegate))
+                obj = generatorDelegate.Invoke();
             return obj;
         }
     }

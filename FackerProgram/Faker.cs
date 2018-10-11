@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -8,22 +7,20 @@ namespace FackerProgram
     public sealed class Faker : IFacker
     {
         private Generator generator;
-        private List<object> DTOList;
 
         public Faker()
         {
             generator = new Generator();
-            DTOList = new List<object>();
         }
 
-        public void DTOAdd(object obj)
+        public void DTOAdd(Type t)
         {
-            DTOList.Add(obj);
+            generator.DTOAddType(t);
         }
 
-        public void DTORemove(object obj)
+        public void DTORemove(Type t)
         {
-            DTOList.Remove(obj);
+            generator.DTORemoveType(t);
         }
 
         //поиск конструктора с минимальным количеством параметров
@@ -123,24 +120,6 @@ namespace FackerProgram
             }
             Console.WriteLine("Object was create by filling fields\n");
             return CreateByFillingFields<T>();
-        }
-
-        public void PrintObject(object obj)
-        {
-            Type t = obj.GetType();
-            Console.WriteLine("Fields:\n");
-            FieldInfo[] fields = t.GetFields();
-            foreach (FieldInfo field in fields)
-                Console.WriteLine(field.FieldType + "  " + field.Name + "  " + field.GetValue(obj));
-
-            Console.WriteLine("\nPropeties:\n");
-            PropertyInfo[] properties = t.GetProperties();
-            foreach (PropertyInfo property in properties)
-            {
-                if (property.CanWrite && property.SetMethod.IsPublic)
-                    Console.WriteLine(property.PropertyType + "  " + property.Name + "  " + property.GetValue(obj));
-            }
-            Console.WriteLine();
         }
     }
 }

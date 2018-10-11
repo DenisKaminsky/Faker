@@ -21,14 +21,15 @@ namespace Faker
         {
             FackerProgram.Faker faker = new FackerProgram.Faker();          
             MyTestClass c = faker.Create<MyTestClass>();
-            faker.PrintObject(c);
+            ConsolePrinter printer = new ConsolePrinter();
+            printer.Print(c);
         }
     }
 
     public class MyTestClass
     {
-        public string[] mass;
-        public List<List<bool>> list;
+        public bool[] mass;
+        public List<int>[] list;
         //public Foo foo;
         private int fieldprivate;
         public int fieldpublic;
