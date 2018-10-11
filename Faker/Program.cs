@@ -21,29 +21,31 @@ namespace Faker
         {
             FackerProgram.Faker faker = new FackerProgram.Faker();
             faker.DTOAdd(typeof(Foo));
-            faker.DTOAdd(typeof(Bar));    
+            faker.DTOAdd(typeof(Bar));
             MyTestClass c = faker.Create<MyTestClass>();
             ConsolePrinter printer = new ConsolePrinter();
-            printer.Print(c);
+            printer.DTOListAdd(typeof(Foo));
+            printer.DTOListAdd(typeof(Bar));
+            printer.Print(c,"");
         }
     }
 
     public class MyTestClass
     {
-        //public bool[] mass;
-       // public List<int>[] list;
+        public bool[] mass;
+        public List<int>[] list;
         public Foo foo;
         public Bar bar;
-        /*private int fieldprivate;
+        private int fieldprivate;
         public int fieldpublic;
         
         public short fieldpublic2;
         public double fieldpublic8;
         public string s;
-        public DateTime d;*/
+        public DateTime d;
 
         public string Str { get; set; }
-        //public MyTestClass proverty2 { get; set; }
+        public MyTestClass proverty2 { get; set; }
 
         /*public MyTestClass(int f1, short f2, string f3)
         {
@@ -60,14 +62,12 @@ namespace Faker
 
     public class Foo
     {        
-        //private int fieldprivate;
-        //public bool fieldpublic;
-        public MyTestClass bar;
+        private int fieldprivate;
+        public string fieldpublic;
+        public MyTestClass test;
+        
 
-        /*public short fieldpublic2;
-        public DateTime d;
-
-        public string Str { get; set; }*/
+        public string Str { get; set; }
 
         public Foo()
         {
@@ -78,12 +78,12 @@ namespace Faker
     public class Bar
     {
         //private int fieldprivate;
-        //public bool fieldpublic;
+        public bool fieldpublic;
         public Foo foo;
-        /*public short fieldpublic2;
+        public short fieldpublic2;
         public DateTime d;
 
-        public string Str { get; set; }*/
+        public string Str { get; set; }
 
         public Bar()
         {

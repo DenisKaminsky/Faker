@@ -2,14 +2,28 @@
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FackerProgram
 {
     public sealed class ConsolePrinter:IPrinter
     {
+        private List<Type> _DTOList;
+
+        public ConsolePrinter()
+        {
+            _DTOList = new List<Type>();
+        }
+
+        public void DTOListAdd(Type t)
+        {
+            _DTOList.Add(t);
+        }
+
+        public void DTOListRemove(Type t)
+        {
+            _DTOList.Remove(t);
+        }
+
         private void PrintArray(object obj, string indent)
         {
             Array array = (Array)obj;
@@ -53,9 +67,14 @@ namespace FackerProgram
             if (obj != null)
             {
                 if (obj.GetType().IsArray)
-                    PrintArray(obj, indent);
+                    PrintArray(obj, indent+"  ");
                 else if (obj.GetType().IsGenericType)
                     PrintList(obj, indent);
+                else if (_DTOList.Contains(obj.GetType()))
+                {
+                    Console.WriteLine();
+                    Print(obj, indent + "  ");
+                }
                 else
                     Console.WriteLine(obj);
             }
@@ -63,25 +82,25 @@ namespace FackerProgram
                 Console.WriteLine("null");
         }
 
-        public void Print(object obj)
+        public void Print(object obj,String indent)
         {
             Type t = obj.GetType();
-            Console.WriteLine("Fields:\n");
+            Console.WriteLine(indent+"Fields:");
             FieldInfo[] fields = t.GetFields();
             foreach (FieldInfo field in fields)
             {
-                Console.Write(field.FieldType + "  " + field.Name + "  ");
-                PrintValue(field.GetValue(obj),"");
+                Console.Write(indent+"- "+field.FieldType + "  " + field.Name + "  ");
+                PrintValue(field.GetValue(obj),indent);
             }
 
-            Console.WriteLine("\nPropeties:\n");
+            Console.WriteLine(indent+"Propeties:");
             PropertyInfo[] properties = t.GetProperties();
             foreach (PropertyInfo property in properties)
             {
                 if (property.CanWrite && property.SetMethod.IsPublic)
                 {
-                    Console.Write(property.PropertyType + "  " + property.Name+ "  ");
-                    PrintValue(property.GetValue(obj), "");
+                    Console.Write(indent+"- "+property.PropertyType + "  " + property.Name+ "  ");
+                    PrintValue(property.GetValue(obj), indent);
                 }
             }
             Console.WriteLine();

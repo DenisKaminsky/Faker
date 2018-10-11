@@ -2,6 +2,6 @@
 {
     interface IPrinter
     {
-        void Print(object obj);
+        void Print(object obj,string indent);
     }
 }
