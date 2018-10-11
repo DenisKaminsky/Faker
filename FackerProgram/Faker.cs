@@ -5,14 +5,25 @@ using System.Reflection;
 
 namespace FackerProgram
 {
-    public sealed class Faker
+    public sealed class Faker : IFacker
     {
-        private BaseGenerator baseGenerator;
-        private DateTimeGenerator dateTimeGenerator;
+        private Generator generator;
+        private List<object> DTOList;
+
         public Faker()
         {
-            baseGenerator = new BaseGenerator();
-            dateTimeGenerator = new DateTimeGenerator();
+            generator = new Generator();
+            DTOList = new List<object>();
+        }
+
+        public void DTOAdd(object obj)
+        {
+            DTOList.Add(obj);
+        }
+
+        public void DTORemove(object obj)
+        {
+            DTOList.Remove(obj);
         }
 
         //поиск конструктора с минимальным количеством параметров
@@ -51,60 +62,7 @@ namespace FackerProgram
                 }
             }
             return maxParamConstructor;
-        }       
-
-        //генератор значений(общий)
-        private object GenerateValue(Type t)
-        {
-            object obj = null;
-
-            switch (t.ToString())
-            {
-                case "System.Int16":
-                    obj = baseGenerator.GenerateShort();
-                    break;
-                case "System.Int32":
-                    obj = baseGenerator.GenerateInt();
-                    break;
-                case "System.Int64":
-                    obj = baseGenerator.GenerateLong();
-                    break;
-                case "System.UInt16":
-                    obj = baseGenerator.GenerateUShort();
-                    break;
-                case "System.UInt32":
-                    obj = baseGenerator.GenerateUInt();
-                    break;
-                case "System.UInt64":
-                    obj = baseGenerator.GenerateULong();
-                    break;
-                case "System.Double":
-                    obj = baseGenerator.GenerateDouble();
-                    break;
-                case "System.Single":
-                    obj = baseGenerator.GenerateFloat();
-                    break;
-                case "System.Char":
-                    obj = baseGenerator.GenerateChar();
-                    break;
-                case "System.Boolean":
-                    obj = baseGenerator.GenerateBool();
-                    break;
-                case "System.Byte":
-                    obj = baseGenerator.GenerateByte();
-                    break;
-                case "System.String":
-                    obj = baseGenerator.GenerateString();
-                    break;
-                case "System.Object":
-                    obj = baseGenerator.GenerateObject();
-                    break;
-                case "System.DateTime":
-                    obj = dateTimeGenerator.GenerateDate();
-                    break;      
-            }
-            return obj;
-        }
+        } 
 
         //создание обьекта инициализацией полей и свойств
         public T CreateByFillingFields<T>()
@@ -118,7 +76,7 @@ namespace FackerProgram
             {
                 try
                 {
-                    field.SetValue(obj, GenerateValue(field.FieldType));
+                    field.SetValue(obj, generator.GenerateValue(field.FieldType));
                 }
                 catch(FieldAccessException e)
                 {
@@ -130,47 +88,59 @@ namespace FackerProgram
             foreach (PropertyInfo property in properties)
             {
                 if (property.CanWrite && property.SetMethod.IsPublic)
-                    property.SetValue(obj, GenerateValue(property.PropertyType));
+                    property.SetValue(obj, generator.GenerateValue(property.PropertyType));
             }
             return obj;
         }
 
-        public T CreateByConstructor<T>()
+        public T CreateByConstructor<T>(ConstructorInfo constructor)
         {
             Type t = typeof(T);
-            ConstructorInfo constructor = FindMaxParamsConstructor(t);
             object[] parametersValues = new object[constructor.GetParameters().Count<ParameterInfo>()];
             ParameterInfo[] parameters =  constructor.GetParameters();
             int i = 0;
             foreach (ParameterInfo parameter in parameters)
             {
-                parametersValues[i] = GenerateValue(parameter.ParameterType);
+                parametersValues[i] = generator.GenerateValue(parameter.ParameterType);
                 i++;
             }
             T obj = (T)constructor.Invoke(parametersValues);
             return obj;
+        }        
+
+        public T Create<T>()
+        {
+            Type t = typeof(T);
+            ConstructorInfo constructor = FindMaxParamsConstructor(t);
+            int constructorParametersCount = constructor.GetParameters().Count<ParameterInfo>();
+            int publicFieldCount = t.GetFields().Count<FieldInfo>();
+            int publicPropertiesCount = t.GetProperties().Count<PropertyInfo>();
+
+            if (constructorParametersCount >= publicFieldCount + publicPropertiesCount)
+            {
+                Console.WriteLine("Object was create by constructor\n");
+                return CreateByConstructor<T>(constructor);
+            }
+            Console.WriteLine("Object was create by filling fields\n");
+            return CreateByFillingFields<T>();
         }
 
         public void PrintObject(object obj)
         {
             Type t = obj.GetType();
             Console.WriteLine("Fields:\n");
-            FieldInfo[] fields = t.GetFields();           
+            FieldInfo[] fields = t.GetFields();
             foreach (FieldInfo field in fields)
-                Console.WriteLine(field.FieldType + "  " + field.Name+"  "+field.GetValue(obj));
+                Console.WriteLine(field.FieldType + "  " + field.Name + "  " + field.GetValue(obj));
 
             Console.WriteLine("\nPropeties:\n");
             PropertyInfo[] properties = t.GetProperties();
             foreach (PropertyInfo property in properties)
             {
                 if (property.CanWrite && property.SetMethod.IsPublic)
-                    Console.WriteLine(property.PropertyType + "  " + property.Name+"  "+property.GetValue(obj));
+                    Console.WriteLine(property.PropertyType + "  " + property.Name + "  " + property.GetValue(obj));
             }
-        }
-
-        public void Create<T>()
-        {
-                        
+            Console.WriteLine();
         }
     }
 }

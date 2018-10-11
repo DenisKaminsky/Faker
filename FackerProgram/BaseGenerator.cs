@@ -100,7 +100,7 @@ namespace FackerProgram
         public string GenerateString()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            int length = rand.Next(1, 100);
+            int length = rand.Next(1, 21);
             string s ="";
             for (int i = 0; i < length; i++)
             {
