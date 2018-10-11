@@ -10,13 +10,6 @@ namespace Faker
 {
     class Program
     {
-        //генератор Char
-        public static double GenerateChar()
-        {
-            Random rand = new Random();
-            return rand.NextDouble();
-        }
-
         static void Main(string[] args)
         {
             FackerProgram.Faker faker = new FackerProgram.Faker();
@@ -36,7 +29,6 @@ namespace Faker
         public List<int>[] list;
         public Foo foo;
         public Bar bar;
-        private int fieldprivate;
         public int fieldpublic;
         
         public short fieldpublic2;
@@ -47,12 +39,12 @@ namespace Faker
         public string Str { get; set; }
         public MyTestClass proverty2 { get; set; }
 
-        /*public MyTestClass(int f1, short f2, string f3)
+        public MyTestClass(int f1, short f2, string f3)
         {
             fieldpublic = f1;
             fieldpublic2 = f2;
             Str = f3;
-        }*/
+        }
 
         public MyTestClass()
         {
@@ -62,10 +54,9 @@ namespace Faker
 
     public class Foo
     {        
-        private int fieldprivate;
         public string fieldpublic;
         public MyTestClass test;
-        
+        public Bar bar;
 
         public string Str { get; set; }
 
@@ -77,7 +68,6 @@ namespace Faker
 
     public class Bar
     {
-        //private int fieldprivate;
         public bool fieldpublic;
         public Foo foo;
         public short fieldpublic2;

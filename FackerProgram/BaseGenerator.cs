@@ -72,6 +72,12 @@ namespace FackerProgram
             return Convert.ToByte(_rand.Next(0, 256));
         }
 
+        //генератор SByte
+        public object GenerateSByte()
+        {
+            return Convert.ToSByte(_rand.Next(-128, 128));
+        }
+
         //генератор Char
         public object GenerateChar()
         {

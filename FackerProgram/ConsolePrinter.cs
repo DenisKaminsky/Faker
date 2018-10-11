@@ -28,7 +28,6 @@ namespace FackerProgram
         {
             Array array = (Array)obj;
             object value;
-
             Console.WriteLine("Length = " + array.Length);
             for (int i = 0; i < array.Length; i++)
             {

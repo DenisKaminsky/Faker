@@ -46,7 +46,7 @@ namespace FackerProgram
         private ConstructorInfo FindMaxParamsConstructor(Type t)
         {
             ConstructorInfo[] constructors = t.GetConstructors();
-            ConstructorInfo maxParamConstructor = constructors[0];
+            ConstructorInfo maxParamConstructor = null;
             int max = 0;
 
             foreach (ConstructorInfo constructor in constructors)
@@ -107,15 +107,12 @@ namespace FackerProgram
             object result;
             _generator.AddToCycle(t);
             ConstructorInfo constructor = FindMaxParamsConstructor(t);
-            int constructorParametersCount = constructor.GetParameters().Count<ParameterInfo>();
             int publicFieldCount = t.GetFields().Count<FieldInfo>();
             int publicPropertiesCount = t.GetProperties().Count<PropertyInfo>();
-
-            if (constructorParametersCount >= publicFieldCount + publicPropertiesCount)
-            {
+            if ((constructor == null) || (constructor.GetParameters().Count<ParameterInfo>() < publicFieldCount + publicPropertiesCount))
+                result = CreateByFillingFields(t);
+            else
                 result = CreateByConstructor(constructor,t);
-            }
-            result = CreateByFillingFields(t);
             _generator.RemoveFromCycle(t);
             return result;
         }

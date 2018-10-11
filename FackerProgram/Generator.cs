@@ -63,6 +63,7 @@ namespace FackerProgram
             _typeDictionary.Add(typeof(Char), _baseGenerator.GenerateChar);
             _typeDictionary.Add(typeof(Boolean), _baseGenerator.GenerateBool);
             _typeDictionary.Add(typeof(Byte), _baseGenerator.GenerateByte);
+            _typeDictionary.Add(typeof(SByte), _baseGenerator.GenerateSByte);
             _typeDictionary.Add(typeof(String), _baseGenerator.GenerateString);
             _typeDictionary.Add(typeof(Object), _baseGenerator.GenerateObject);
             _typeDictionary.Add(typeof(DateTime), _dateTimeGenerator.GenerateDate);
@@ -71,6 +72,7 @@ namespace FackerProgram
         //генератор значений(общий)
         public object GenerateValue(Type t)
         {
+            
             object obj = null;
             Func<object> generatorDelegate = null;
 
