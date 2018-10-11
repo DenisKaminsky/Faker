@@ -40,12 +40,12 @@ namespace Faker
         public short fieldpublic2;
         public double fieldpublic8;
         public string s;
-        public DateTime d;
+        public DateTime d;*/
 
         public string Str { get; set; }
-        private MyTestClass proverty2 { get; set;}
+        //public MyTestClass proverty2 { get; set; }
 
-        public MyTestClass(int f1, short f2, string f3)
+        /*public MyTestClass(int f1, short f2, string f3)
         {
             fieldpublic = f1;
             fieldpublic2 = f2;

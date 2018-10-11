@@ -79,7 +79,10 @@ namespace FackerProgram
             foreach (PropertyInfo property in properties)
             {
                 if (property.CanWrite && property.SetMethod.IsPublic)
-                    Console.WriteLine(property.PropertyType + "  " + property.Name + "  " + property.GetValue(obj));
+                {
+                    Console.Write(property.PropertyType + "  " + property.Name+ "  ");
+                    PrintValue(property.GetValue(obj), "");
+                }
             }
             Console.WriteLine();
         }

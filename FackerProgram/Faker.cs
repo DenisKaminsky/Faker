@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
 
 namespace FackerProgram
 {
@@ -114,10 +113,8 @@ namespace FackerProgram
 
             if (constructorParametersCount >= publicFieldCount + publicPropertiesCount)
             {
-                Console.WriteLine("Object was create by constructor\n");
                 result = CreateByConstructor(constructor,t);
             }
-            //Console.WriteLine("Object was create by filling fields\n");
             result = CreateByFillingFields(t);
             _generator.RemoveFromCycle(t);
             return result;
