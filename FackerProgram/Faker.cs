@@ -123,12 +123,13 @@ namespace FackerProgram
             object result;
             ConstructorInfo parameterizedConstructor;
             ConstructorInfo nonParameterizedConstructor;
+            int publicFieldCount, publicPropertiesCount;
 
             _generator.AddToCycle(t);
             parameterizedConstructor = FindMaxParamsConstructor(t);
             nonParameterizedConstructor = FindMinParamsConstructor(t);
-            int publicFieldCount = t.GetFields().Count<FieldInfo>();
-            int publicPropertiesCount = t.GetProperties().Count<PropertyInfo>();
+            publicFieldCount = t.GetFields().Count<FieldInfo>();
+            publicPropertiesCount = t.GetProperties().Count<PropertyInfo>();
             if ((parameterizedConstructor == null) || ((nonParameterizedConstructor != null)
                 && (parameterizedConstructor.GetParameters().Count<ParameterInfo>() < publicFieldCount + publicPropertiesCount)))
             {

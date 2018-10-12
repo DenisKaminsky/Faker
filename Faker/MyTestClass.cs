@@ -10,6 +10,7 @@ namespace Faker
         public List<int> _list;
         public Foo _foo;
         public Bar _bar;
+        public int _fieldInt;
         public short _fieldShort;
         public long _fieldLong;
         public ushort _fieldUShort;
@@ -20,6 +21,7 @@ namespace Faker
         public byte _fieldByte;
         public sbyte _fieldSByte;
         public string _fieldString;
+        public bool _fieldBool;
         public DateTime _fieldDate;
         public object _fieldObject;
 
