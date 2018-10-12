@@ -45,6 +45,7 @@
     <Compile Include="Faker.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="IFacker.cs" />
+    <Compile Include="IGenerator.cs" />
     <Compile Include="IPrinter.cs" />
     <Compile Include="ConsolePrinter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

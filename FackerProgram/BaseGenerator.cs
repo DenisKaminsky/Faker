@@ -9,7 +9,7 @@ namespace FackerProgram
 
         public BaseGenerator()
         {
-            _rand = new Random();            
+            _rand = new Random(); 
         }
 
         //генератор Short(INT16)

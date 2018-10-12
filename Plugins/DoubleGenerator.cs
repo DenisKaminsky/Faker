@@ -13,5 +13,10 @@ namespace Plugins
             rand.NextBytes(bytes);
             return BitConverter.ToDouble(bytes, 0);
         }
+
+        public Type GetValueType()
+        {
+            return typeof(Double);
+        }
     }
 }

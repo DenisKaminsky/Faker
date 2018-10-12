@@ -13,5 +13,10 @@ namespace Plugins
             rand.NextBytes(bytes);
             return BitConverter.ToInt16(bytes, 0);
         }
+
+        public Type GetValueType()
+        {
+            return typeof(short);
+        }
     }
 }
