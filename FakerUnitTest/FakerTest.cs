@@ -112,10 +112,23 @@ namespace FakerUnitTest
         }
 
         [TestMethod]
-        public void DateTimeGeneratorTest()
+        public void NestingTest()
         {
-            Assert.IsTrue(result._fieldDate != null);
+            Assert.IsTrue(result._foo != null);
+            Assert.IsTrue(result._foo._fieldBar != null);
+            Assert.IsTrue(result._bar != null);
+            Assert.IsTrue(result._bar._fieldFoo != null);
         }
+
+        [TestMethod]
+        public void CycleDependencyTest()
+        {
+            Assert.IsTrue(result._foo._fieldTest == null);
+            Assert.IsTrue(result._foo._fieldBar._fieldFoo == null);
+            Assert.IsTrue(result._bar._fieldFoo._fieldTest == null);
+            Assert.IsTrue(result._bar._fieldFoo._fieldBar == null);
+        }
+
 
     }
 }
