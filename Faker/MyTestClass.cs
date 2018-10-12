@@ -8,6 +8,7 @@ namespace Faker
         private int _fieldPrivateInt;
         public bool[] _mass;
         public List<int> _list;
+        public List<byte>[] _arrayOfList;
         public Foo _foo;
         public Bar _bar;
         public int _fieldInt;

@@ -112,6 +112,25 @@ namespace FakerUnitTest
         }
 
         [TestMethod]
+        public void ListGeneratorTest()
+        {
+            Assert.IsTrue(result._list != null && result._list is List<int>);
+        }
+
+        [TestMethod]
+        public void ArrayGeneratorTest()
+        {
+            Assert.IsTrue((result._mass != null) && (result._mass is Array) && (result._mass[0] is bool));
+        }
+
+        [TestMethod]
+        public void ArrayOfListTest()
+        {
+            Assert.IsTrue((result._arrayOfList != null) && (result._arrayOfList is Array) && (result._arrayOfList[0] != null) 
+                &&(result._arrayOfList[0] is List<byte>) && (result._arrayOfList[0][0] is byte));
+        }
+
+        [TestMethod]
         public void NestingTest()
         {
             Assert.IsTrue(result._foo != null);
