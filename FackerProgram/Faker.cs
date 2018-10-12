@@ -129,11 +129,17 @@ namespace FackerProgram
             nonParameterizedConstructor = FindMinParamsConstructor(t);
             int publicFieldCount = t.GetFields().Count<FieldInfo>();
             int publicPropertiesCount = t.GetProperties().Count<PropertyInfo>();
-            if ((parameterizedConstructor == null) || ((nonParameterizedConstructor != null) 
-                && (parameterizedConstructor.GetParameters().Count<ParameterInfo>() < publicFieldCount+ publicPropertiesCount)))
+            if ((parameterizedConstructor == null) || ((nonParameterizedConstructor != null)
+                && (parameterizedConstructor.GetParameters().Count<ParameterInfo>() < publicFieldCount + publicPropertiesCount)))
+            {
                 result = CreateByFillingFields(t);
+                Console.WriteLine(result.GetType()+" was create by filling fields");
+            }
             else
+            {
                 result = CreateByConstructor(parameterizedConstructor, t);
+                Console.WriteLine(result.GetType()+ " was create by ctor");
+            }
             _generator.RemoveFromCycle(t);
             return result;
         }
