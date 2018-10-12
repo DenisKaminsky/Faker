@@ -16,6 +16,7 @@ namespace FackerProgram
         public object GenerateShort() 
         {
             byte[] bytes = new byte[sizeof(short)]; 
+
             _rand.NextBytes(bytes);
             return BitConverter.ToInt16(bytes, 0);
         }
@@ -24,6 +25,7 @@ namespace FackerProgram
         public object GenerateInt()
         {
             byte[] bytes = new byte[sizeof(int)];
+
             _rand.NextBytes(bytes);
             return BitConverter.ToInt32(bytes,0);
         }
@@ -32,6 +34,7 @@ namespace FackerProgram
         public object GenerateLong()
         {
             byte[] bytes = new byte[sizeof(long)];
+
             _rand.NextBytes(bytes);
             return BitConverter.ToInt64(bytes,0);
         }
@@ -40,6 +43,7 @@ namespace FackerProgram
         public object GenerateUShort()
         {
             byte[] bytes = new byte[sizeof(ushort)];
+
             _rand.NextBytes(bytes);
             return BitConverter.ToUInt16(bytes, 0);
         }
@@ -48,6 +52,7 @@ namespace FackerProgram
         public object GenerateUInt()
         {
             byte[] bytes = new byte[sizeof(uint)];
+
             _rand.NextBytes(bytes);
             return BitConverter.ToUInt32(bytes, 0);
         }
@@ -56,6 +61,7 @@ namespace FackerProgram
         public object GenerateULong()
         {
             byte[] bytes = new byte[sizeof(ulong)];
+
             _rand.NextBytes(bytes);
             return BitConverter.ToUInt64(bytes, 0);
         }
@@ -82,6 +88,7 @@ namespace FackerProgram
         public object GenerateChar()
         {
             byte[] bytes = new byte[sizeof(char)];
+
             _rand.NextBytes(bytes);
             return BitConverter.ToChar(bytes, 0);
         }
@@ -90,6 +97,7 @@ namespace FackerProgram
         public object GenerateDouble()
         {
             byte[] bytes = new byte[sizeof(double)];
+
             _rand.NextBytes(bytes);
             return BitConverter.ToDouble(bytes, 0);
         }
@@ -98,6 +106,7 @@ namespace FackerProgram
         public object GenerateFloat()
         {
             byte[] bytes = new byte[sizeof(float)];
+
             _rand.NextBytes(bytes);
             return BitConverter.ToSingle(bytes, 0);
         }
@@ -108,6 +117,7 @@ namespace FackerProgram
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             int length = _rand.Next(1, 21);
             string s ="";
+
             for (int i = 0; i < length; i++)
             {
                 //s += Convert.ToChar(GenerateByte());
@@ -122,6 +132,7 @@ namespace FackerProgram
         {
             MethodInfo[] methods = this.GetType().GetMethods();
             object obj = methods[_rand.Next(0, methods.Length - 4)].Invoke(this, new object[] { });
+
             return obj;
         }
     }

@@ -27,16 +27,16 @@ namespace FackerProgram
         private ConstructorInfo FindMinParamsConstructor(Type t)
         {
             ConstructorInfo[] constructors = t.GetConstructors();
-            ConstructorInfo minParamConstructor = constructors[0];
-            int min = constructors[0].GetParameters().Count<ParameterInfo>();
+            ConstructorInfo minParamConstructor = null;
+            int paramsCount;
 
             foreach (ConstructorInfo constructor in constructors)
             {
-                int paramsCount = constructor.GetParameters().Count<ParameterInfo>();
-                if (paramsCount < min)
+                paramsCount = constructor.GetParameters().Count<ParameterInfo>();
+                if (paramsCount == 0)
                 {
-                    min = paramsCount;
                     minParamConstructor = constructor;
+                    break;
                 }                    
             }
             return minParamConstructor;                
@@ -47,11 +47,11 @@ namespace FackerProgram
         {
             ConstructorInfo[] constructors = t.GetConstructors();
             ConstructorInfo maxParamConstructor = null;
-            int max = 0;
+            int max = 0, paramsCount = 0 ;
 
             foreach (ConstructorInfo constructor in constructors)
             {
-                int paramsCount = constructor.GetParameters().Count<ParameterInfo>();
+                paramsCount = constructor.GetParameters().Count<ParameterInfo>();
                 if (paramsCount > max)
                 {
                     max = paramsCount;
@@ -64,10 +64,10 @@ namespace FackerProgram
         //создание обьекта инициализацией полей и свойств
         public object CreateByFillingFields(Type t)
         {          
-            object obj = Activator.CreateInstance(t);   //System.MissingMethodException();
-
-            //инициализация полей
+            object obj = Activator.CreateInstance(t); 
             FieldInfo[] fields = t.GetFields();
+            PropertyInfo[] properties = t.GetProperties();
+
             foreach (FieldInfo field in fields)
             {
                 try
@@ -79,12 +79,13 @@ namespace FackerProgram
                     //...const
                 }
             }
-            //инициализация свойств
-            PropertyInfo[] properties = t.GetProperties();
+
             foreach (PropertyInfo property in properties)
             {
                 if (property.CanWrite && property.SetMethod.IsPublic)
+                {
                     property.SetValue(obj, _generator.GenerateValue(property.PropertyType));
+                }
             }
             return obj;
         }
@@ -93,34 +94,55 @@ namespace FackerProgram
         {
             object[] parametersValues = new object[constructor.GetParameters().Count<ParameterInfo>()];
             ParameterInfo[] parameters =  constructor.GetParameters();
+            object result; 
+
             int i = 0;
+
             foreach (ParameterInfo parameter in parameters)
             {
                 parametersValues[i] = _generator.GenerateValue(parameter.ParameterType);
                 i++;
             }
-            return constructor.Invoke(parametersValues);
+            try
+            {
+                result = constructor.Invoke(parametersValues);
+            }
+            catch(OutOfMemoryException e)
+            {
+                result = null;
+            }
+            catch(OverflowException e)
+            {
+                result = null;
+            }
+            return result;
         }        
 
         public object Create(Type t)
         {
             object result;
+            ConstructorInfo parameterizedConstructor;
+            ConstructorInfo nonParameterizedConstructor;
+
             _generator.AddToCycle(t);
-            ConstructorInfo constructor = FindMaxParamsConstructor(t);
+            parameterizedConstructor = FindMaxParamsConstructor(t);
+            nonParameterizedConstructor = FindMinParamsConstructor(t);
             int publicFieldCount = t.GetFields().Count<FieldInfo>();
             int publicPropertiesCount = t.GetProperties().Count<PropertyInfo>();
-            if ((constructor == null) || (constructor.GetParameters().Count<ParameterInfo>() < publicFieldCount + publicPropertiesCount))
+            if ((parameterizedConstructor == null) || ((nonParameterizedConstructor != null) 
+                && (parameterizedConstructor.GetParameters().Count<ParameterInfo>() < publicFieldCount+ publicPropertiesCount)))
                 result = CreateByFillingFields(t);
             else
-                result = CreateByConstructor(constructor,t);
+                result = CreateByConstructor(parameterizedConstructor, t);
             _generator.RemoveFromCycle(t);
             return result;
         }
 
         public T Create<T>()
         {
-            _generator.SetFaker(this);
             Type t = typeof(T);
+
+            _generator.SetFaker(this);
             return (T)Create(t);
         }
     }

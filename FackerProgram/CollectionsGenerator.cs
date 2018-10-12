@@ -19,6 +19,7 @@ namespace FackerProgram
         {
             object list = Activator.CreateInstance(typeof(List<>).MakeGenericType(t));
             int count = _rand.Next(1, 21);
+
             for (int i = 0; i < count; i++)
             {
                 ((IList)list).Add(generator.GenerateValue(t));

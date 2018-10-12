@@ -28,6 +28,7 @@ namespace FackerProgram
         {
             Array array = (Array)obj;
             object value;
+
             Console.WriteLine("Length = " + array.Length);
             for (int i = 0; i < array.Length; i++)
             {
@@ -83,26 +84,33 @@ namespace FackerProgram
 
         public void Print(object obj,String indent)
         {
-            Type t = obj.GetType();
-            Console.WriteLine(indent+"Fields:");
-            FieldInfo[] fields = t.GetFields();
-            foreach (FieldInfo field in fields)
-            {
-                Console.Write(indent+"- "+field.FieldType + "  " + field.Name + "  ");
-                PrintValue(field.GetValue(obj),indent);
-            }
+            Type t;
 
-            Console.WriteLine(indent+"Propeties:");
-            PropertyInfo[] properties = t.GetProperties();
-            foreach (PropertyInfo property in properties)
+            if (obj != null)
             {
-                if (property.CanWrite && property.SetMethod.IsPublic)
+                t = obj.GetType();
+                Console.WriteLine(indent + "Fields:");
+                FieldInfo[] fields = t.GetFields();
+                foreach (FieldInfo field in fields)
                 {
-                    Console.Write(indent+"- "+property.PropertyType + "  " + property.Name+ "  ");
-                    PrintValue(property.GetValue(obj), indent);
+                    Console.Write(indent + "- " + field.FieldType + "  " + field.Name + "  ");
+                    PrintValue(field.GetValue(obj), indent);
                 }
+
+                Console.WriteLine(indent + "Propeties:");
+                PropertyInfo[] properties = t.GetProperties();
+                foreach (PropertyInfo property in properties)
+                {
+                    if (property.CanWrite && property.SetMethod.IsPublic)
+                    {
+                        Console.Write(indent + "- " + property.PropertyType + "  " + property.Name + "  ");
+                        PrintValue(property.GetValue(obj), indent);
+                    }
+                }
+                Console.WriteLine();
             }
-            Console.WriteLine();
+            else
+                Console.WriteLine("null");
         }
     }
 }

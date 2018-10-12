@@ -14,7 +14,7 @@ namespace FackerProgram
         private Faker _faker;
 
         public Generator()
-        {
+        {            
             _baseGenerator = new BaseGenerator();
             _dateTimeGenerator = new DateTimeGenerator();
             _collectionGenerator = new CollectionsGenerator();
