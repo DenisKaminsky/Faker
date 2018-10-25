@@ -13,16 +13,6 @@ namespace FackerProgram
             _generator = new Generator();
         }
 
-        public void DTOAdd(Type t)
-        {
-            _generator.DTOAddType(t);
-        }
-
-        public void DTORemove(Type t)
-        {
-            _generator.DTORemoveType(t);
-        }
-
         //поиск конструктора с минимальным количеством параметров
         private ConstructorInfo FindMinParamsConstructor(Type t)
         {
@@ -84,7 +74,7 @@ namespace FackerProgram
             {
                 if (property.CanWrite && property.SetMethod.IsPublic)
                 {
-                    property.SetValue(obj, _generator.GenerateValue(property.PropertyType));
+                    property.SetValue(obj, _generator.GenerateValue(property.PropertyType));                    
                 }
             }
             return obj;
@@ -109,10 +99,17 @@ namespace FackerProgram
             }
             catch(OutOfMemoryException e)
             {
+                Console.WriteLine(e.Message);
                 result = null;
             }
             catch(OverflowException e)
             {
+                Console.WriteLine(e.Message);
+                result = null;
+            }
+            catch (TargetInvocationException e)
+            {
+                Console.WriteLine(e.Message);
                 result = null;
             }
             return result;
@@ -139,7 +136,8 @@ namespace FackerProgram
             else
             {
                 result = CreateByConstructor(parameterizedConstructor, t);
-                Console.WriteLine(result.GetType()+ " was create by ctor");
+                if (result != null)
+                    Console.WriteLine(result.GetType()+ " was create by ctor");
             }
             _generator.RemoveFromCycle(t);
             return result;

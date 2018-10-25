@@ -25,7 +25,6 @@ namespace Faker
         public bool _fieldBool;
         public DateTime _fieldDate;
         public object _fieldObject;
-
         public string propertyString { get; set; }
         public MyTestClass propertyTest { get; set; }
         public char propertyChar { get; set; }

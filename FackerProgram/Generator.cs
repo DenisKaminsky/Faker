@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Linq;
 
 namespace FackerProgram
 {
@@ -11,7 +10,6 @@ namespace FackerProgram
         private DateTimeGenerator _dateTimeGenerator;
         private CollectionsGenerator _collectionGenerator;
         private Dictionary<Type,Func<object>> _typeDictionary;
-        private List<Type> _dtoTypeList;
         private List<Type> _cycleList;
         private Faker _faker;
         private Assembly _asm;
@@ -22,7 +20,6 @@ namespace FackerProgram
             _dateTimeGenerator = new DateTimeGenerator();
             _collectionGenerator = new CollectionsGenerator();
             _typeDictionary = new Dictionary<Type, Func<object>>();
-            _dtoTypeList = new List<Type>();
             _cycleList = new List<Type>();
             _asm = Assembly.LoadFile("C:\\Users\\Денис\\Documents\\GitHub\\Faker\\Plugins\\bin\\Debug\\Plugins.dll");
             FillDictionary();
@@ -41,17 +38,6 @@ namespace FackerProgram
         public void SetFaker(Faker faker)
         {
             _faker = faker;
-        }
-
-        public void DTOAddType(Type t)
-        {
-            if (!_dtoTypeList.Contains(t))
-                _dtoTypeList.Add(t);
-        }
-
-        public void DTORemoveType(Type t)
-        {
-            _dtoTypeList.Remove(t);
         }
 
         private void FillDictionary()
@@ -102,10 +88,10 @@ namespace FackerProgram
             }
             else if (_typeDictionary.TryGetValue(t, out generatorDelegate))
                 obj = generatorDelegate.Invoke();
-            else if (_dtoTypeList.Contains(t))
+            else 
             {
-                if (!_cycleList.Contains(t))                
-                    obj = _faker.Create(t);                
+                if (!_cycleList.Contains(t))
+                    obj = _faker.Create(t);
             }
             return obj;
         }

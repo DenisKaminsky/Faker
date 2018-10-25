@@ -10,9 +10,6 @@ namespace Faker
             FackerProgram.Faker faker = new FackerProgram.Faker();
             MyTestClass test;
             ConsolePrinter printer;
-
-            faker.DTOAdd(typeof(Foo));
-            faker.DTOAdd(typeof(Bar));
             test = faker.Create<MyTestClass>();
             Console.WriteLine();
             printer = new ConsolePrinter();
